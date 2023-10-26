@@ -1,0 +1,16 @@
+[
+    {
+        "candidato":"candidado1",
+        "cidade":"cidade1",
+        "estado":"estado1",
+        "numero":"numero1"
+    },
+
+    {
+        "candidato":"candidado2",
+        "cidade":"cidade2",
+        "estado":"estado2",
+        "numero":"numero2"
+    }
+
+]

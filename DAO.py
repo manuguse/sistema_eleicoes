@@ -38,12 +38,12 @@ class DAO(ABC):
     #    except KeyError:
     #        pass
 
-    def remove(self, key):
-        try:
-            del self.__cache[key]
-            self.dump()
-        except KeyError:
-            pass
+    #def remove(self, key):
+    #    try:
+    #        del self.__cache[key]
+    #        self.dump()
+    #    except KeyError:
+    #        pass
 
     def get_all(self):
-        return list(self.__cache.values())
+        return self.__cache

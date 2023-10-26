@@ -1,6 +1,6 @@
 class Controller:
     def __init__(self) -> None:
-        self.__candidatos = 
+        pass
     
     def start(self):
         pass

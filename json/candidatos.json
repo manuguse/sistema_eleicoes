@@ -1,0 +1,11 @@
+{
+    "nome1":{
+        "numero":"numero1",
+        "partido":"partido1"
+    },
+
+    "nome2":{
+        "numero":"numero2",	
+        "partido":"partido2"
+    }
+}
