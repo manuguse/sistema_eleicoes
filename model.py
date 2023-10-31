@@ -1,10 +1,6 @@
-from data_DAO import data_DAO
+from data_DAO import DataDAO
 
 class Model:
-    def __init__(self) -> None:
-        self.__candidatos = data_DAO('candidatos.json')
-        
-    def start(self):
-        pass
-        
-    
+    def __init__(self, sistema) -> None:
+        self.__candidatos_exemplo = DataDAO('candidatos.json')
+        self.__sistema = sistema #json

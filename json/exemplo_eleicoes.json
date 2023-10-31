@@ -1,0 +1,31 @@
+{   
+    "candidatos": [
+        {
+            "nome1":{
+                "numero":"numero1",
+                "partido":"partido1"
+            }
+        },
+        {
+            "nome2":{
+                "numero":"numero2",	
+                "partido":"partido2"
+            }
+        }
+    ],
+    "votos": [
+        {
+            "candidato":"candidado1",
+            "cidade":"cidade1",
+            "estado":"estado1",
+            "numero":"numero1"
+        },
+    
+        {
+            "candidato":"candidado2",
+            "cidade":"cidade2",
+            "estado":"estado2",
+            "numero":"numero2"
+        }
+    ]
+}
