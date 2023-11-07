@@ -1,5 +1,4 @@
 import json
-from candidatos import Candidato
 
 
 class Model:
@@ -35,5 +34,20 @@ class Model:
     def receber_arquivo(self, nome_arquivo):
         with open(nome_arquivo, 'r') as arquivo:
             self.__dados = json.load(arquivo)
-            self.__DAO.cache = self.__dados
-            self.__DAO.dump()
+            self.somar_votos()
+
+    def somar_votos(self):
+        for candidato in self.__dados:
+            if candidato["nome"] not in self.obter_candidatos():
+                self.__DAO.cache.append(candidato)
+            else:
+                for candidato_ofc in self.__DAO.cache:
+                    if candidato["nome"] == candidato_ofc["nome"]:
+                        for regiao in candidato["votos"].keys():
+                            if regiao not in candidato_ofc["votos"].keys():
+                                candidato_ofc["votos"][regiao] = candidato["votos"][regiao]
+                            else:
+                                candidato_ofc["votos"][regiao] = int(candidato_ofc["votos"][regiao])
+                                candidato_ofc["votos"][regiao] += int(candidato["votos"][regiao])
+                                candidato_ofc["votos"][regiao] = str(candidato_ofc["votos"][regiao])
+        self.__DAO.dump()

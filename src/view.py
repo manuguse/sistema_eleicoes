@@ -28,7 +28,8 @@ class View:
         self.__layout = [
             [sg.Text("Seja Bem-Vindo ao sistema de Eleições")],
             [sg.Button("Ver resultado final")],
-            [sg.Button("Adicionar novo arquivo de contagem de votos")]
+            [sg.Button("Abrir arquivo para somar votos")],
+            [sg.Button("Sair")]
         ]
 
         self.__window = sg.Window("Sistema de Eleições", self.__layout)
@@ -43,7 +44,7 @@ class View:
                 for regiao, votos in itens.items():
                     self.__layout.append([sg.Text(candidato, size=(20, 1)), sg.Text(regiao, size=(20, 1)), sg.Text(votos, size=(20, 1))])
 
-            self.__layout.append([sg.Button("Voltar")])
+            self.__layout.append([sg.Button("Voltar ao menu")])
 
             self.__window = sg.Window("Resultado da Eleição", self.__layout)
 
@@ -51,9 +52,9 @@ class View:
         self.__layout = [
             [sg.Text('Selecione um arquivo JSON:')],
             [sg.InputText(key='file_path'), sg.FileBrowse(file_types=(("JSON Files", "*.json"),))],
-            [sg.Button('Abrir'), sg.Button('Sair')],
+            [sg.Button('Abrir')],
             [sg.Multiline(size=(40, 10), key='json_output', disabled=True)],
-            [sg.Button("Voltar")],
+            [sg.Button("Voltar ao menu")],
         ]
 
         self.__window = sg.Window('Abrir Arquivo JSON', self.__layout)
@@ -64,7 +65,7 @@ class View:
             [sg.Column(layout=[[sg.Canvas(key='-PIE_CANVAS-')]])],
             [sg.Text("Gráfico de Colunas")],
             [sg.Column(layout=[[sg.Canvas(key='-BAR_CANVAS-')]])],
-            [sg.Button('Gerar Gráficos'), sg.Button('Sair')],
+            [sg.Button('Gerar Gráficos'), sg.Button('Voltar ao menu')],
         ]
 
         self.__window = sg.Window('Gráficos com PySimpleGUI', self.__layout, finalize=True)

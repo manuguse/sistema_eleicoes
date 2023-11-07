@@ -39,7 +39,7 @@ class Controller:
                 self.__view.window.close()
                 self.__view.resultado(candidatos, votos_por_regiao)
 
-            elif event == "Adicionar novo arquivo de contagem de votos":
+            elif event == "Abrir arquivo para somar votos":
                 self.__view.window.close()
                 self.__view.import_arquivo()
             
@@ -47,10 +47,12 @@ class Controller:
                 try:
                     file_path = values['file_path']
                     self.__model.receber_arquivo(file_path)
+                    self.__view.window.close()
+                    self.__view.menu()
                 except:
-                    pass # não vai acontecer nada se não for escolhido nenhum arquivo novo
+                    sg.popup('O aplicativo não consegue abrir o arquivo selecionado, tente outro arquivo .json!', title='Arquivo errado')
             
-            elif event == "Voltar":
+            elif event == "Voltar ao menu":
                 self.__view.window.close()
                 self.__view.menu()
             
