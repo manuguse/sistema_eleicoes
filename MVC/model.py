@@ -59,8 +59,7 @@ class Model(Observer, Observable):
             for elemento in x:
                 if elemento not in list:
                     list.append(elemento)
-        return list
-            
+        return list    
 
     def obter_votos_por_regiao(self, candidato):
         for candidatos_info in self.__DAO.cache:
