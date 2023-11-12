@@ -4,8 +4,6 @@ from MVC.model import Model
 
 import PySimpleGUI as sg
 
-import json
-
 from OBSERVER.observable import Observable
 from OBSERVER.observer import Observer
 
@@ -17,17 +15,16 @@ class Controller(Observer, Observable):
         self.__model = model
         self.__state = None
     
-    def update(self, model):        
-        if model.state == "Controller pronto":
-            self.mudar_estado()
-            self.notificar_observadores()
-        if len(self.__model.vencedor) > 1:
-            sg.popup("O(s) vencedor(es) é(são)", [candidato for candidato in self.__model.vencedor])
-        else:
-            sg.popup("O vencedor atual é", self.__model.vencedor[0])
+    def update(self, model):
+        self.__state = None      
+        if model.state == "Model pronto":
+            if len(self.__model.vencedor) > 1:
+                sg.popup("O(s) vencedor(es) é(são)", [candidato for candidato in self.__model.vencedor])
+            else:
+                sg.popup("O vencedor atual é", self.__model.vencedor[0])
     
     def mudar_estado(self):
-        self.state = "Controller pronto"
+        self.__state = "Controller pronto"
         self.notificar_observadores()
 
     @property
@@ -73,19 +70,18 @@ class Controller(Observer, Observable):
 
             elif event == "Abrir arquivo para somar votos":
                 self.__view.window.close()
+                self.mudar_estado()
                 self.__view.import_arquivo()
             
             elif event == "Abrir":
-                try:
-                    file_path = values['file_path']
+                file_path = values['file_path']
+                if file_path not in self.__model.retornar_nome_arquivos():
                     self.__model.receber_arquivo(file_path)
-                    self.__view.window.close()
-                    self.__view.menu()
                     self.mudar_estado()
-                except json.JSONDecodeError:
-                    sg.popup('O aplicativo não consegue abrir o arquivo selecionado pois ele não é um arquivo compatível, tente outro arquivo .json!', title='Arquivo errado')
-                # except:
-                #     sg.popup('Esse arquivo ja foi somado anteriormente, e não será somado novamente, tente outro arquivo .json', title='Arquivo ja foi somado a base de dados')
+                else:
+                    sg.popup("Arquivo já somado anteriormete")
+                self.__view.window.close()
+                self.__view.menu()
             
             elif event == "Voltar ao menu":
                 self.__view.window.close()

@@ -1,5 +1,6 @@
 import json
 import random
+import PySimpleGUI as sg
 
 from OBSERVER.observable import Observable
 from OBSERVER.observer import Observer
@@ -17,9 +18,9 @@ class Model(Observer, Observable):
         self.__vencedor = None
 
     def update(self, model):
+        self.__state = None
         if model.state == "Controller pronto":
-            self.__vencedor = self.retornar_vencedor()
-            self.mudar_estado()
+            self.retornar_vencedor()
     
     def mudar_estado(self):
         self.state = "Model pronto"
@@ -81,13 +82,13 @@ class Model(Observer, Observable):
         return 0
 
     def receber_arquivo(self, nome_arquivo):
-        if nome_arquivo not in self.retornar_nome_arquivos():
-            self.adicionar_arquivo_a_lista(nome_arquivo)
+        try:
             with open(nome_arquivo, 'r') as arquivo:
                 self.__dados = json.load(arquivo)
                 self.somar_votos()
-        # else:
-        #     raise Exception
+                self.adicionar_arquivo_a_lista(nome_arquivo)
+        except Exception:
+            sg.popup("Arquivo incompatível")
 
     def somar_votos(self):
         for candidato in self.__dados:
@@ -129,6 +130,9 @@ class Model(Observer, Observable):
             votos_totais = self.obter_total_de_votos(candidato)
             if vencedor_atual == [None] or votos_totais > self.obter_total_de_votos(vencedor_atual[0]):
                 vencedor_atual = [candidato]
-            elif votos_totais == vencedor_atual:
+            elif votos_totais == self.obter_total_de_votos(vencedor_atual[0]):
                 vencedor_atual.append(candidato)
-        return vencedor_atual
+        if not self.__vencedor == vencedor_atual:
+            self.__vencedor = vencedor_atual
+            self.mudar_estado()
+    
