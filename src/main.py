@@ -13,6 +13,8 @@ class Main:
         view = View(controller)
         controller.view = view
         self.controller = controller
+        model.registrar_observador(controller)
+        controller.registrar_observador(model)
 
     def init(self):
         self.controller.iniciar_aplicativo()

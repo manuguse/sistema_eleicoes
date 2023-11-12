@@ -71,8 +71,8 @@ class View:
 
         self.__window = sg.Window('Abrir Arquivo JSON', self.__layout)
     
-    def mostrar_graficos_resultado(self, candidatos, total_de_votos):
-        x = 10  # Define a posição inicial em X
+    def mostrar_graficos_resultado(self, candidatos, total_de_votos, lista_cores):
+        x = 10
         escala = 20
 
         self.__layout = [
@@ -80,37 +80,16 @@ class View:
             [sg.Button("Voltar ao menu")]
         ]
 
-
         self.__window = sg.Window('Total de votos por candidato', self.__layout, finalize=True)
         graph = self.__window['graph']
 
-        cores = ["blue", "red", "green", "purple", "orange", "pink"]
-        cores_usadas = []
-
-        def escolher_cor(cores_usadas):
-            cores_disponiveis = [cor for cor in cores if cor not in cores_usadas]
-
-            if cores_disponiveis:
-                cor = random.choice(cores_disponiveis)
-                cores_usadas.append(cor)
-            else:
-                cores_usadas.clear()
-                cor = random.choice(cores)
-                cores_usadas.append(cor)
-
-            return cor
-
-        for candidato, votos in zip(candidatos, total_de_votos):
-            cor = escolher_cor(cores_usadas)
+        for candidato, votos, cor in zip(candidatos, total_de_votos, lista_cores):
             graph.draw_rectangle((x, 10), (x + 30, votos / escala), line_color=cor, fill_color=cor)
-
-            # Adicione a legenda relacionando a cor ao candidato
-            legenda_x = x + 15  # A posição X da legenda é o centro da barra
-            legenda_y = 5  # A posição Y da legenda (ajuste conforme necessário)
+            legenda_x = x + 15 
+            legenda_y = 5
             graph.draw_text(candidato, (legenda_x, legenda_y), font="any 12", color="white")
             graph.draw_text(votos, (legenda_x, legenda_y+10), font="any 12", color="white")
-
-            x += 50  # Aumenta a posição em X para a próxima barra
+            x += 50
 
     def mostrar_pesquisa_candidato_regioes(self, candidatos, regioes):
         self.__layout = [

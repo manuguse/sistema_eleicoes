@@ -1,11 +1,49 @@
 import json
+import random
+
+from OBSERVER.observable import Observable
+from OBSERVER.observer import Observer
 
 
-class Model:
+class Model(Observer, Observable):
     def __init__(self, DAO, DAO_arqs):
+        super().__init__()
         self.__DAO = DAO
         self.__DAO_arqs = DAO_arqs
         self.__dados = None
+        self.__cores = ["blue", "red", "green", "purple", "orange", "pink"]
+        self.__cores_usadas = []
+        self.__state = None
+        self.__vencedor = None
+
+    def update(self, model):
+        if model.state == "Controller pronto":
+            self.__vencedor = self.retornar_vencedor()
+            self.mudar_estado()
+    
+    def mudar_estado(self):
+        self.state = "Model pronto"
+        self.notificar_observadores()
+
+    @property
+    def state(self):
+        return self.__state
+    
+    @state.setter
+    def state(self, val):
+        self.__state = val
+
+    @property
+    def vencedor(self):
+        return self.__vencedor
+
+    @property
+    def cores(self):
+        return self.__cores
+    
+    @property
+    def cores_usadas(self):
+        return self.__cores_usadas
 
     def obter_candidatos(self):
         candidatos = []
@@ -26,7 +64,7 @@ class Model:
     def obter_votos_por_regiao(self, candidato):
         for candidatos_info in self.__DAO.cache:
             if candidatos_info["nome"] == candidato:
-                return candidatos_info["votos"]  # dicionário região:voto
+                return candidatos_info["votos"]
         return {}
 
     def obter_total_de_votos(self, candidato):
@@ -48,8 +86,8 @@ class Model:
             with open(nome_arquivo, 'r') as arquivo:
                 self.__dados = json.load(arquivo)
                 self.somar_votos()
-        else:
-            raise Exception
+        # else:
+        #     raise Exception
 
     def somar_votos(self):
         for candidato in self.__dados:
@@ -72,3 +110,25 @@ class Model:
 
     def retornar_nome_arquivos(self):
         return self.__DAO_arqs.get_all()
+
+    def escolher_cor(self):
+        cores_disponiveis = [cor for cor in self.__cores if cor not in self.__cores_usadas]
+
+        if cores_disponiveis:
+            cor = random.choice(cores_disponiveis)
+            self.__cores_usadas.append(cor)
+        else:
+            self.__cores_usadas.clear()
+            cor = random.choice(self.__cores)
+            self.__cores_usadas.append(cor)
+        return cor
+    
+    def retornar_vencedor(self):
+        vencedor_atual = [None]
+        for candidato in self.obter_candidatos():
+            votos_totais = self.obter_total_de_votos(candidato)
+            if vencedor_atual == [None] or votos_totais > self.obter_total_de_votos(vencedor_atual[0]):
+                vencedor_atual = [candidato]
+            elif votos_totais == vencedor_atual:
+                vencedor_atual.append(candidato)
+        return vencedor_atual
