@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 class DAO(ABC):
     def __init__(self, datasource):
         self.__datasource = datasource
-        self.__cache = []
+        self.__cache = {}
         try:
             self.load()
         except FileNotFoundError:
@@ -17,8 +17,7 @@ class DAO(ABC):
 
     @cache.setter
     def cache(self, cache):
-        if isinstance(cache, list):
-            self.__cache = cache
+        self.__cache = cache
 
     def dump(self):
         with open(self.__datasource, 'w') as file:
@@ -28,22 +27,22 @@ class DAO(ABC):
         with open(self.__datasource, 'r') as file:
             self.__cache = json.load(file)
 
-    def add(self, obj):
-        self.__cache.append(obj)
+    def add(self, key, obj):
+        self.__cache[key] = obj
         self.dump()
 
-    #def get(self, key):
-    #    try:
-    #        return self.__cache[key]
-    #    except KeyError:
-    #        pass
+    def get(self, key):
+        try:
+            return self.__cache[key]
+        except KeyError:
+            pass
 
-    #def remove(self, key):
-    #    try:
-    #        del self.__cache[key]
-    #        self.dump()
-    #    except KeyError:
-    #        pass
+    def remove(self, key):
+        try:
+            del self.__cache[key]
+            self.dump()
+        except KeyError:
+            pass
 
     def get_all(self):
-        return self.__cache
+        return list(self.__cache.values())

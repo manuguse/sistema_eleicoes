@@ -1,0 +1,7 @@
+[
+    {"nome": "Pedro", "votos": {"sc": "40", "pr": "40"}},
+    {"nome": "Marco", "votos": {"sc": "40", "pr": "10", "rs": "40"}},
+    {"nome": "José", "votos": {"am": "600"}},
+    {"nome": "Mateus", "votos": {"sc": "45"}}
+  ]
+  
